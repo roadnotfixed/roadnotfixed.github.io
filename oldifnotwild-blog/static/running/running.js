@@ -12,8 +12,13 @@
   const activitiesBody = document.getElementById('running-activities');
   const toggle = document.getElementById('running-toggle');
   const errorBox = document.getElementById('running-error');
+  const routeSelect = document.getElementById('running-route-select');
+  const routeSummary = document.getElementById('running-route-summary');
+  const mapElement = document.getElementById('running-map');
   let allActivities = [];
   let showAll = false;
+  let map = null;
+  let routeLayer = null;
 
   const number = new Intl.NumberFormat('zh-CN', { maximumFractionDigits: 1 });
 
@@ -23,6 +28,20 @@
 
   function durationTotal(items) {
     return items.reduce((sum, item) => sum + item.duration_min, 0);
+  }
+
+  function averageHeartRate(items) {
+    const withHeartRate = items.filter(
+      (item) => Number.isFinite(item.avg_hr_bpm) && item.avg_hr_bpm > 0
+    );
+    const duration = durationTotal(withHeartRate);
+    if (!withHeartRate.length || duration <= 0) return null;
+    return (
+      withHeartRate.reduce(
+        (sum, item) => sum + item.avg_hr_bpm * item.duration_min,
+        0
+      ) / duration
+    );
   }
 
   function formatDuration(minutes) {
@@ -68,12 +87,14 @@
     const totalDuration = durationTotal(items);
     const longest = Math.max(...items.map((item) => item.distance_km));
     const averagePace = totalDistance > 0 ? totalDuration / totalDistance : 0;
+    const averageHr = averageHeartRate(items);
     const cards = [
       [number.format(totalDistance), '公里'],
       [number.format(items.length), '次跑步'],
       [formatDuration(totalDuration), '总时长'],
       [number.format(longest), '最长距离 km'],
       [formatPace(averagePace), '平均配速'],
+      [averageHr ? `${Math.round(averageHr)} bpm` : '—', '平均心率'],
     ];
 
     stats.replaceChildren();
@@ -143,17 +164,89 @@
     });
   }
 
+  function initMap() {
+    if (!mapElement || !window.L) {
+      routeSummary.textContent = '地图组件加载失败，跑步统计仍可正常查看。';
+      return;
+    }
+    map = window.L.map(mapElement, { scrollWheelZoom: false }).setView([20, 0], 2);
+    window.L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 18,
+      attribution: '&copy; OpenStreetMap contributors',
+    }).addTo(map);
+  }
+
+  function showRoute(item) {
+    if (!map || !item || !Array.isArray(item.route) || item.route.length < 2) {
+      return;
+    }
+    if (routeLayer) map.removeLayer(routeLayer);
+    routeLayer = window.L.polyline(item.route, {
+      color: '#e96524',
+      weight: 4,
+      opacity: 0.9,
+      lineJoin: 'round',
+    }).addTo(map);
+    map.fitBounds(routeLayer.getBounds(), { padding: [24, 24], maxZoom: 14 });
+    const heartRate = Number.isFinite(item.avg_hr_bpm)
+      ? ` · ${Math.round(item.avg_hr_bpm)} bpm`
+      : '';
+    routeSummary.textContent = `${item.date} · ${number.format(item.distance_km)} km · ${formatPace(item.pace_min_km)}${heartRate}`;
+  }
+
+  function renderRouteOptions(items) {
+    const routes = [...items]
+      .filter((item) => Array.isArray(item.route) && item.route.length >= 2)
+      .sort((a, b) => b.date.localeCompare(a.date));
+    routeSelect.replaceChildren();
+    if (!routes.length) {
+      const option = document.createElement('option');
+      option.textContent = '该年份没有可公开路线';
+      routeSelect.append(option);
+      routeSelect.disabled = true;
+      routeSummary.textContent = '该年份的记录没有匹配到可公开的 Apple Health 路线。';
+      if (routeLayer && map) {
+        map.removeLayer(routeLayer);
+        routeLayer = null;
+      }
+      return;
+    }
+
+    routeSelect.disabled = false;
+    routes.forEach((item) => {
+      const option = document.createElement('option');
+      option.value = String(item._index);
+      option.textContent = `${item.date} · ${number.format(item.distance_km)} km`;
+      routeSelect.append(option);
+    });
+    showRoute(routes[0]);
+  }
+
+  function selectRoute(item) {
+    if (!item || !Array.isArray(item.route) || item.route.length < 2) return;
+    routeSelect.value = String(item._index);
+    showRoute(item);
+    mapElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
   function renderActivities(items) {
     const ordered = [...items].sort((a, b) => b.date.localeCompare(a.date));
     const visible = showAll ? ordered : ordered.slice(0, 20);
     activitiesBody.replaceChildren();
     visible.forEach((item) => {
       const row = document.createElement('tr');
+      const hasRoute = Array.isArray(item.route) && item.route.length >= 2;
+      row.dataset.hasRoute = String(hasRoute);
+      if (hasRoute) {
+        row.title = '点击查看路线';
+        row.addEventListener('click', () => selectRoute(item));
+      }
       const values = [
         item.date,
         `${number.format(item.distance_km)} km`,
         formatDuration(item.duration_min),
         formatPace(item.pace_min_km),
+        Number.isFinite(item.avg_hr_bpm) ? `${Math.round(item.avg_hr_bpm)} bpm` : '—',
       ];
       values.forEach((value) => {
         const cell = document.createElement('td');
@@ -166,24 +259,31 @@
     toggle.textContent = showAll ? '收起' : `显示全部 ${ordered.length} 次`;
   }
 
-  function renderYear() {
+  function selectedYearActivities() {
     const year = Number(yearSelect.value);
-    const selected = allActivities.filter(
+    return allActivities.filter(
       (item) => localDate(item.date).getFullYear() === year
     );
+  }
+
+  function renderYear() {
+    const year = Number(yearSelect.value);
+    const selected = selectedYearActivities();
     showAll = false;
     renderStats(selected);
     renderHeatmap(selected, year);
     renderMonthly(selected);
+    renderRouteOptions(selected);
     renderActivities(selected);
   }
 
   toggle.addEventListener('click', () => {
     showAll = !showAll;
-    const year = Number(yearSelect.value);
-    renderActivities(
-      allActivities.filter((item) => localDate(item.date).getFullYear() === year)
-    );
+    renderActivities(selectedYearActivities());
+  });
+
+  routeSelect.addEventListener('change', () => {
+    showRoute(allActivities[Number(routeSelect.value)]);
   });
 
   yearSelect.addEventListener('change', renderYear);
@@ -203,6 +303,9 @@
           item.duration_min > 0
       );
       if (!allActivities.length) throw new Error('没有可显示的跑步记录');
+      allActivities.forEach((item, index) => {
+        item._index = index;
+      });
 
       const years = [
         ...new Set(allActivities.map((item) => localDate(item.date).getFullYear())),
@@ -215,10 +318,17 @@
       });
 
       const firstDate = allActivities[0].date;
-      lifetime.textContent = `${firstDate} 至今 · ${number.format(distanceTotal(allActivities))} km · ${allActivities.length} 次跑步`;
+      const heartRateCount = allActivities.filter((item) =>
+        Number.isFinite(item.avg_hr_bpm)
+      ).length;
+      const routeCount = allActivities.filter(
+        (item) => Array.isArray(item.route) && item.route.length >= 2
+      ).length;
+      lifetime.textContent = `${firstDate} 至今 · ${number.format(distanceTotal(allActivities))} km · ${allActivities.length} 次跑步 · ${heartRateCount} 条心率 · ${routeCount} 条路线`;
       updated.textContent = payload.generated_date
         ? `数据更新：${payload.generated_date}`
         : '';
+      initMap();
       renderYear();
     })
     .catch((error) => {

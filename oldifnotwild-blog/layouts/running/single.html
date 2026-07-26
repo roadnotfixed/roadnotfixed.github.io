@@ -5,8 +5,8 @@
     <h1>Running</h1>
     <p id="running-lifetime" class="running-lead">正在读取跑步记录……</p>
     <p class="running-privacy">
-      数据来自 Apple Health 的本地导出。公开内容只包含日期、距离、时长和配速；
-      不包含 Strava 账号、轨迹、精确时间、心率、设备或活动 ID。
+      数据来自 Apple Health 的本地导出，不关联或展示 Strava 账号。
+      路线已移除时间和海拔、抽稀坐标，并默认裁掉起点和终点各约 500 米。
     </p>
   </div>
 
@@ -41,6 +41,18 @@
     </section>
   </div>
 
+  <section class="running-panel running-map-panel">
+    <div class="running-panel-heading running-map-heading">
+      <div>
+        <p class="running-panel-label">PRIVACY-TRIMMED ROUTES</p>
+        <h2>路线地图</h2>
+      </div>
+      <select id="running-route-select" aria-label="选择路线"></select>
+    </div>
+    <p id="running-route-summary" class="running-route-summary">正在读取路线……</p>
+    <div id="running-map" class="running-map" aria-label="跑步路线地图"></div>
+  </section>
+
   <section class="running-panel running-log-panel">
     <div class="running-panel-heading">
       <div>
@@ -52,7 +64,7 @@
     <div class="running-table-wrap">
       <table class="running-table">
         <thead>
-          <tr><th>日期</th><th>距离</th><th>时长</th><th>配速</th></tr>
+          <tr><th>日期</th><th>距离</th><th>时长</th><th>配速</th><th>平均心率</th></tr>
         </thead>
         <tbody id="running-activities"></tbody>
       </table>

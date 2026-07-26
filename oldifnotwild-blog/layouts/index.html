@@ -1,3 +1,22 @@
 {{ define "main" }}
-{{ .Content }}
+<section class="home-intro">
+  <p class="home-kicker">PERSONAL ARCHIVE</p>
+  <h1>Narrenschiff</h1>
+  <div class="home-copy">{{ .Content }}</div>
+</section>
+
+<section class="home-portals" aria-label="网站内容入口">
+  <a class="home-portal home-portal-running" href="{{ "running/" | relURL }}">
+    <span class="home-portal-label">RUNNING</span>
+    <strong>跑步档案</strong>
+    <span>年度跑量、平均心率、训练热力图和隐私处理后的路线地图。</span>
+    <em>查看 Running →</em>
+  </a>
+  <a class="home-portal" href="{{ "blog/" | relURL }}">
+    <span class="home-portal-label">WRITING</span>
+    <strong>Blog</strong>
+    <span>文章、笔记，以及仍在整理中的想法。</span>
+    <em>阅读文章 →</em>
+  </a>
+</section>
 {{ end }}
