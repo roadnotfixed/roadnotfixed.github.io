@@ -183,7 +183,7 @@
     }
     if (routeLayer) map.removeLayer(routeLayer);
     routeLayer = window.L.polyline(item.route, {
-      color: '#eaff35',
+      color: '#0c4a6e',
       weight: 4,
       opacity: 0.95,
       lineJoin: 'round',

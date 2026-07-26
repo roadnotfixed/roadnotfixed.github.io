@@ -1,8 +1,8 @@
 .running-body {
   max-width: 1440px;
   padding: 26px 54px;
-  background: #151515;
-  color: #eaff35;
+  background: #f5f5f4;
+  color: #0c4a6e;
   font-family: "IBM Plex Sans", Arial, sans-serif;
 }
 
@@ -11,11 +11,11 @@
 .running-body h3,
 .running-body strong,
 .running-body b {
-  color: #eaff35;
+  color: #0c4a6e;
 }
 
 .running-body a {
-  color: #eaff35;
+  color: #0c4a6e;
 }
 
 .running-body header {
@@ -32,23 +32,23 @@
 }
 
 .running-body nav a {
-  color: #eaff35;
+  color: #0c4a6e;
   font-size: 0.86rem;
   text-decoration: none;
 }
 
 .running-body footer {
-  color: #8f8f8f;
+  color: #78716c;
   font-size: 0.72rem;
 }
 
 .running-page {
-  --run-accent: #eaff35;
-  --run-text: #f2f2ed;
-  --run-muted: #a8a8a3;
-  --run-divider: #ff4050;
-  --run-surface: #1c1c1c;
-  --run-surface-soft: #232323;
+  --run-accent: #0c4a6e;
+  --run-text: #1f2937;
+  --run-muted: #64748b;
+  --run-divider: #c5756b;
+  --run-surface: #ffffff;
+  --run-surface-soft: #e7e5e4;
   margin: 24px 0 52px;
   color: var(--run-text);
 }
@@ -103,7 +103,7 @@
   padding: 0;
   border: 0;
   background: transparent;
-  color: #bdbdbd;
+  color: #64748b;
   cursor: pointer;
   font-family: "IBM Plex Mono", Consolas, monospace;
   font-size: 0.9rem;
@@ -117,7 +117,7 @@
 .running-updated {
   display: block;
   margin-top: 20px;
-  color: #757575;
+  color: #78716c;
   font-family: "IBM Plex Mono", Consolas, monospace;
   font-size: 0.67rem;
 }
@@ -205,7 +205,7 @@
 .running-map-heading select,
 .running-log-limit select {
   padding: 6px 28px 6px 9px;
-  border: 1px solid #4a4a4a;
+  border: 1px solid #cbd5e1;
   border-radius: 0;
   background: var(--run-surface);
   color: var(--run-text);
@@ -227,30 +227,31 @@
 .running-map {
   width: 100%;
   height: 520px;
-  background: #101010;
+  border: 1px solid #d6d3d1;
+  background: #e7e5e4;
   overflow: hidden;
 }
 
 .running-map .leaflet-tile-pane {
-  filter: grayscale(1) invert(0.9) contrast(0.82) brightness(0.72);
+  filter: grayscale(0.35) saturate(0.72) contrast(0.94) brightness(1.04);
 }
 
 .running-map .leaflet-control-zoom a {
-  border-color: #333;
-  background: #242424;
+  border-color: #cbd5e1;
+  background: #ffffff;
   color: var(--run-accent);
 }
 
 .running-map .leaflet-control-attribution {
-  background: rgba(20, 20, 20, 0.72);
-  color: #aaa;
+  background: rgba(255, 255, 255, 0.82);
+  color: #475569;
   font-size: 0.58rem;
 }
 
 .running-log-panel {
   margin-top: 26px;
   padding-top: 22px;
-  border-top: 1px solid #3b3b3b;
+  border-top: 1px solid #d6d3d1;
 }
 
 .running-log-limit {
@@ -283,7 +284,7 @@
 }
 
 .running-table th {
-  color: #dedede;
+  color: #334155;
   font-size: 0.68rem;
   letter-spacing: 0.06em;
 }
@@ -293,7 +294,7 @@
 }
 
 .running-table tbody tr:hover {
-  background: #252525;
+  background: #e7e5e4;
   color: var(--run-accent);
 }
 
@@ -323,12 +324,12 @@
   width: 11px;
   height: 11px;
   border-radius: 1px;
-  background: #303030;
+  background: #e7e5e4;
 }
 
-.running-legend i[data-level="1"], .running-day[data-level="1"] { background: #596218; }
-.running-legend i[data-level="2"], .running-day[data-level="2"] { background: #879422; }
-.running-legend i[data-level="3"], .running-day[data-level="3"] { background: #b8ca2c; }
+.running-legend i[data-level="1"], .running-day[data-level="1"] { background: #bae6fd; }
+.running-legend i[data-level="2"], .running-day[data-level="2"] { background: #7dd3fc; }
+.running-legend i[data-level="3"], .running-day[data-level="3"] { background: #0284c7; }
 .running-legend i[data-level="4"], .running-day[data-level="4"] { background: var(--run-accent); }
 
 .running-heatmap {
@@ -390,12 +391,12 @@
   margin: 20px 0;
   padding: 12px 14px;
   border: 1px solid var(--run-divider);
-  color: #ff8791;
+  color: #b91c1c;
 }
 
 .running-credit {
   margin-top: 38px;
-  color: #777;
+  color: #78716c;
   font-size: 0.7rem;
   text-align: right;
 }
