@@ -1,3 +1,7 @@
 oldifnotwild-blog/.hugo_build.lock
 oldifnotwild-blog/public/
-
+*.db
+.env
+watch_data.zip
+__pycache__/
+*.py[cod]

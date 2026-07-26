@@ -23,7 +23,7 @@
   {{- partial "custom_head.html" . -}}
 </head>
 
-<body>
+<body{{ if eq .Type "running" }} class="running-body"{{ end }}>
   <header>
     {{- partial "header.html" . -}}
   </header>
