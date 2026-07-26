@@ -1,4 +1,4 @@
-baseURL = 'https://narrenschiff.github.io/'
+baseURL = 'https://roadnotfixed.github.io/'
 languageCode = 'en-us'
 title = 'Narrenschiff'
 theme = 'hugo-bearblog'
