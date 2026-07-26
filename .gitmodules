@@ -1,0 +1,3 @@
+[submodule "oldifnotwild-blog/themes/hugo-bearblog"]
+	path = oldifnotwild-blog/themes/hugo-bearblog
+	url = https://github.com/janraasch/hugo-bearblog.git
