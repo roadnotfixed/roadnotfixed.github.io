@@ -1,7 +1,0 @@
-{{ if .IsHome }}
-<link rel="stylesheet" href="{{ "home.css" | relURL }}">
-{{ end }}
-{{ if eq .Type "running" }}
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-<link rel="stylesheet" href="{{ "running/running.css" | relURL }}">
-{{ end }}

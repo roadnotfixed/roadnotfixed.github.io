@@ -15,7 +15,7 @@ from xml.etree import ElementTree as ET
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_OUTPUT = REPO_ROOT / "oldifnotwild-blog" / "static" / "running" / "data.json"
+DEFAULT_OUTPUT = REPO_ROOT / "roadnotfixed-blog" / "static" / "running" / "data.json"
 TIME_RE = re.compile(br"<time>([^<]+)</time>")
 
 
@@ -63,7 +63,7 @@ def connect_read_only(db_path: Path) -> sqlite3.Connection:
     )
 
 
-def read_workouts(db_path: Path) -> list[Workout]:
+def read_workouts(db_path: Path, min_distance_km: float) -> list[Workout]:
     connection = connect_read_only(db_path)
     try:
         rows = connection.execute(
@@ -93,7 +93,7 @@ def read_workouts(db_path: Path) -> list[Workout]:
             continue
         duration = float(duration_min)
         distance = float(distance_km)
-        if duration <= 0 or distance <= 0:
+        if duration <= 0 or distance < min_distance_km:
             continue
         start = parse_datetime(str(start_text))
         end = parse_datetime(str(end_text))
@@ -312,11 +312,12 @@ def build_activities(
 
 
 def build_payload(
-    activities: list[dict[str, object]], trim_meters: float
+    activities: list[dict[str, object]], trim_meters: float, min_distance_km: float
 ) -> dict[str, object]:
     return {
         "schema_version": 2,
         "generated_date": datetime.now(timezone.utc).date().isoformat(),
+        "minimum_distance_km": min_distance_km,
         "route_privacy": {
             "endpoint_trim_meters": round(trim_meters),
             "coordinate_decimals": 4,
@@ -331,6 +332,12 @@ def main() -> int:
         description="Export privacy-filtered Apple Health running data for the Hugo site."
     )
     parser.add_argument("--db", required=True, type=Path, help="Path to health.db")
+    parser.add_argument(
+        "--min-distance-km",
+        type=float,
+        default=2.0,
+        help="Exclude runs shorter than this distance (default: 2.0)",
+    )
     parser.add_argument(
         "--routes-zip",
         type=Path,
@@ -358,7 +365,9 @@ def main() -> int:
 
     if args.max_route_points < 2:
         raise SystemExit("--max-route-points must be at least 2")
-    workouts = read_workouts(args.db)
+    if args.min_distance_km < 0:
+        raise SystemExit("--min-distance-km cannot be negative")
+    workouts = read_workouts(args.db, args.min_distance_km)
     if not workouts:
         raise SystemExit("No valid running workouts were found; output was not changed.")
     activities, route_count = build_activities(
@@ -372,7 +381,7 @@ def main() -> int:
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(
         json.dumps(
-            build_payload(activities, args.trim_meters),
+            build_payload(activities, args.trim_meters, args.min_distance_km),
             ensure_ascii=False,
             indent=2,
         )

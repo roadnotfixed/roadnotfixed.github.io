@@ -41,12 +41,12 @@ jobs:
 
       - name: Build site
         run: hugo --minify --baseURL "${{ steps.pages.outputs.base_url }}/"
-        working-directory: oldifnotwild-blog
+        working-directory: roadnotfixed-blog
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: oldifnotwild-blog/public
+          path: roadnotfixed-blog/public
 
   deploy:
     environment:
@@ -58,4 +58,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-

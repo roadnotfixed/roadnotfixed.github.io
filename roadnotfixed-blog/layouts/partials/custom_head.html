@@ -1,0 +1,10 @@
+{{ if .IsHome }}
+<link rel="stylesheet" href="{{ "home.css" | relURL }}">
+{{ end }}
+{{ if eq .Type "running" }}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:ital,wght@0,400;0,600;1,600;1,700&display=swap">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="{{ "running/running.css" | relURL }}">
+{{ end }}

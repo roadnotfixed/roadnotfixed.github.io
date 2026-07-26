@@ -1,5 +1,5 @@
-oldifnotwild-blog/.hugo_build.lock
-oldifnotwild-blog/public/
+roadnotfixed-blog/.hugo_build.lock
+roadnotfixed-blog/public/
 *.db
 .env
 watch_data.zip

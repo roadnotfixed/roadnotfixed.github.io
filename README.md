@@ -2,8 +2,7 @@
 
 Source for <https://roadnotfixed.github.io/>.
 
-The Hugo site lives in `oldifnotwild-blog/`. Pushes to `main` are built and
-deployed to GitHub Pages by the workflow in `.github/workflows/hugo.yml`.
+The Hugo site is built and deployed to GitHub Pages by the workflow in `.github/workflows/hugo.yml`.
 
 ## Running data
 
@@ -13,7 +12,8 @@ the local calendar date, distance, duration, calculated pace, average heart
 rate when available, and simplified route lines. Route timestamps and elevation
 are removed, coordinates are rounded and downsampled, and up to 500 metres are
 trimmed from both endpoints. It does not include exact start times, device
-details, source accounts, API credentials, or activity identifiers.
+details, source accounts, API credentials, or activity identifiers. Runs shorter
+than 2 km are excluded from the public page.
 
 Refresh the public data before publishing new runs:
 

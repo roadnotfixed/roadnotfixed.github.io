@@ -2,7 +2,8 @@
   const root = document.querySelector('.running-page[data-running-url]');
   if (!root) return;
 
-  const yearSelect = document.getElementById('running-year');
+  const yearsContainer = document.getElementById('running-years');
+  const summaryYear = document.getElementById('running-summary-year');
   const lifetime = document.getElementById('running-lifetime');
   const updated = document.getElementById('running-updated');
   const stats = document.getElementById('running-stats');
@@ -10,13 +11,14 @@
   const heatmapTitle = document.getElementById('running-heatmap-title');
   const monthly = document.getElementById('running-monthly');
   const activitiesBody = document.getElementById('running-activities');
-  const toggle = document.getElementById('running-toggle');
+  const limitSelect = document.getElementById('running-limit');
   const errorBox = document.getElementById('running-error');
   const routeSelect = document.getElementById('running-route-select');
   const routeSummary = document.getElementById('running-route-summary');
   const mapElement = document.getElementById('running-map');
   let allActivities = [];
-  let showAll = false;
+  let selectedYear = null;
+  let activityLimit = 10;
   let map = null;
   let routeLayer = null;
 
@@ -48,7 +50,7 @@
     const rounded = Math.round(minutes);
     const hours = Math.floor(rounded / 60);
     const mins = rounded % 60;
-    return hours ? `${hours}h ${mins}m` : `${mins}m`;
+    return hours ? `${hours}h ${mins}m` : `${mins}min`;
   }
 
   function formatPace(value) {
@@ -59,7 +61,7 @@
       minutes += 1;
       seconds = 0;
     }
-    return `${minutes}:${String(seconds).padStart(2, '0')} /km`;
+    return `${minutes}'${String(seconds).padStart(2, '0')}"`;
   }
 
   function localDate(value) {
@@ -88,27 +90,27 @@
     const longest = Math.max(...items.map((item) => item.distance_km));
     const averagePace = totalDistance > 0 ? totalDuration / totalDistance : 0;
     const averageHr = averageHeartRate(items);
-    const cards = [
-      [number.format(totalDistance), '公里'],
-      [number.format(items.length), '次跑步'],
-      [formatDuration(totalDuration), '总时长'],
-      [number.format(longest), '最长距离 km'],
-      [formatPace(averagePace), '平均配速'],
-      [averageHr ? `${Math.round(averageHr)} bpm` : '—', '平均心率'],
+    const rows = [
+      [number.format(items.length), 'Runs'],
+      [number.format(totalDistance), 'km'],
+      [formatPace(averagePace), 'Avg Pace'],
+      [formatDuration(totalDuration), 'Time'],
+      [number.format(longest), 'Longest km'],
+      [averageHr ? String(Math.round(averageHr)) : '—', 'Avg Heart Rate'],
     ];
 
     stats.replaceChildren();
-    cards.forEach(([value, label]) => {
-      const card = document.createElement('div');
-      card.className = 'running-stat';
+    rows.forEach(([value, label]) => {
+      const row = document.createElement('div');
+      row.className = 'running-stat';
       const valueNode = document.createElement('span');
       valueNode.className = 'running-stat-value';
       valueNode.textContent = value;
       const labelNode = document.createElement('span');
       labelNode.className = 'running-stat-label';
       labelNode.textContent = label;
-      card.append(valueNode, labelNode);
-      stats.append(card);
+      row.append(valueNode, labelNode);
+      stats.append(row);
     });
   }
 
@@ -119,7 +121,6 @@
     items.forEach((item) => {
       byDate.set(item.date, (byDate.get(item.date) || 0) + item.distance_km);
     });
-
     const start = new Date(year, 0, 1);
     const end = new Date(year, 11, 31);
     for (let index = 0; index < start.getDay(); index += 1) {
@@ -182,16 +183,16 @@
     }
     if (routeLayer) map.removeLayer(routeLayer);
     routeLayer = window.L.polyline(item.route, {
-      color: '#e96524',
+      color: '#eaff35',
       weight: 4,
-      opacity: 0.9,
+      opacity: 0.95,
       lineJoin: 'round',
     }).addTo(map);
     map.fitBounds(routeLayer.getBounds(), { padding: [24, 24], maxZoom: 14 });
     const heartRate = Number.isFinite(item.avg_hr_bpm)
-      ? ` · ${Math.round(item.avg_hr_bpm)} bpm`
+      ? ` · ${Math.round(item.avg_hr_bpm)} BPM`
       : '';
-    routeSummary.textContent = `${item.date} · ${number.format(item.distance_km)} km · ${formatPace(item.pace_min_km)}${heartRate}`;
+    routeSummary.textContent = `${item.date} · ${number.format(item.distance_km)} KM · ${formatPace(item.pace_min_km)}${heartRate}`;
   }
 
   function renderRouteOptions(items) {
@@ -201,22 +202,21 @@
     routeSelect.replaceChildren();
     if (!routes.length) {
       const option = document.createElement('option');
-      option.textContent = '该年份没有可公开路线';
+      option.textContent = '该年份没有可显示路线';
       routeSelect.append(option);
       routeSelect.disabled = true;
-      routeSummary.textContent = '该年份的记录没有匹配到可公开的 Apple Health 路线。';
+      routeSummary.textContent = '该年份没有匹配到可显示的 Apple Health 路线。';
       if (routeLayer && map) {
         map.removeLayer(routeLayer);
         routeLayer = null;
       }
       return;
     }
-
     routeSelect.disabled = false;
     routes.forEach((item) => {
       const option = document.createElement('option');
       option.value = String(item._index);
-      option.textContent = `${item.date} · ${number.format(item.distance_km)} km`;
+      option.textContent = `${item.date} · ${number.format(item.distance_km)} KM`;
       routeSelect.append(option);
     });
     showRoute(routes[0]);
@@ -231,7 +231,7 @@
 
   function renderActivities(items) {
     const ordered = [...items].sort((a, b) => b.date.localeCompare(a.date));
-    const visible = showAll ? ordered : ordered.slice(0, 20);
+    const visible = activityLimit === 'all' ? ordered : ordered.slice(0, activityLimit);
     activitiesBody.replaceChildren();
     visible.forEach((item) => {
       const row = document.createElement('tr');
@@ -242,11 +242,11 @@
         row.addEventListener('click', () => selectRoute(item));
       }
       const values = [
-        item.date,
-        `${number.format(item.distance_km)} km`,
-        formatDuration(item.duration_min),
+        number.format(item.distance_km),
         formatPace(item.pace_min_km),
-        Number.isFinite(item.avg_hr_bpm) ? `${Math.round(item.avg_hr_bpm)} bpm` : '—',
+        Number.isFinite(item.avg_hr_bpm) ? String(Math.round(item.avg_hr_bpm)) : '—',
+        formatDuration(item.duration_min),
+        item.date,
       ];
       values.forEach((value) => {
         const cell = document.createElement('td');
@@ -255,30 +255,52 @@
       });
       activitiesBody.append(row);
     });
-    toggle.hidden = ordered.length <= 20;
-    toggle.textContent = showAll ? '收起' : `显示全部 ${ordered.length} 次`;
   }
 
   function selectedYearActivities() {
-    const year = Number(yearSelect.value);
     return allActivities.filter(
-      (item) => localDate(item.date).getFullYear() === year
+      (item) => localDate(item.date).getFullYear() === selectedYear
     );
   }
 
+  function updateYearButtons() {
+    yearsContainer.querySelectorAll('button').forEach((button) => {
+      button.setAttribute(
+        'aria-current',
+        String(Number(button.dataset.year) === selectedYear)
+      );
+    });
+  }
+
   function renderYear() {
-    const year = Number(yearSelect.value);
     const selected = selectedYearActivities();
-    showAll = false;
+    summaryYear.textContent = String(selectedYear);
+    updateYearButtons();
     renderStats(selected);
-    renderHeatmap(selected, year);
+    renderHeatmap(selected, selectedYear);
     renderMonthly(selected);
     renderRouteOptions(selected);
     renderActivities(selected);
   }
 
-  toggle.addEventListener('click', () => {
-    showAll = !showAll;
+  function renderYearButtons(years) {
+    yearsContainer.replaceChildren();
+    years.forEach((year) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'running-year-button';
+      button.dataset.year = String(year);
+      button.textContent = String(year);
+      button.addEventListener('click', () => {
+        selectedYear = year;
+        renderYear();
+      });
+      yearsContainer.append(button);
+    });
+  }
+
+  limitSelect.addEventListener('change', () => {
+    activityLimit = limitSelect.value === 'all' ? 'all' : Number(limitSelect.value);
     renderActivities(selectedYearActivities());
   });
 
@@ -286,20 +308,19 @@
     showRoute(allActivities[Number(routeSelect.value)]);
   });
 
-  yearSelect.addEventListener('change', renderYear);
-
   fetch(root.dataset.runningUrl, { cache: 'no-cache' })
     .then((response) => {
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       return response.json();
     })
     .then((payload) => {
+      const minimumDistance = Number(payload.minimum_distance_km) || 2;
       allActivities = (payload.activities || []).filter(
         (item) =>
           /^\d{4}-\d{2}-\d{2}$/.test(item.date) &&
           Number.isFinite(item.distance_km) &&
           Number.isFinite(item.duration_min) &&
-          item.distance_km > 0 &&
+          item.distance_km >= minimumDistance &&
           item.duration_min > 0
       );
       if (!allActivities.length) throw new Error('没有可显示的跑步记录');
@@ -310,23 +331,13 @@
       const years = [
         ...new Set(allActivities.map((item) => localDate(item.date).getFullYear())),
       ].sort((a, b) => b - a);
-      years.forEach((year) => {
-        const option = document.createElement('option');
-        option.value = String(year);
-        option.textContent = String(year);
-        yearSelect.append(option);
-      });
+      selectedYear = years[0];
+      renderYearButtons(years);
 
       const firstDate = allActivities[0].date;
-      const heartRateCount = allActivities.filter((item) =>
-        Number.isFinite(item.avg_hr_bpm)
-      ).length;
-      const routeCount = allActivities.filter(
-        (item) => Array.isArray(item.route) && item.route.length >= 2
-      ).length;
-      lifetime.textContent = `${firstDate} 至今 · ${number.format(distanceTotal(allActivities))} km · ${allActivities.length} 次跑步 · ${heartRateCount} 条心率 · ${routeCount} 条路线`;
+      lifetime.textContent = `记录自己的跑步旅程。公开数据从 ${firstDate} 开始，当前共 ${allActivities.length} 次、${number.format(distanceTotal(allActivities))} KM。`;
       updated.textContent = payload.generated_date
-        ? `数据更新：${payload.generated_date}`
+        ? `DATA UPDATED ${payload.generated_date}`
         : '';
       initMap();
       renderYear();
