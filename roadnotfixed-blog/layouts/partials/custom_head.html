@@ -8,3 +8,6 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <link rel="stylesheet" href="{{ "running/running.css" | relURL }}">
 {{ end }}
+{{ if eq .Section "photos" }}
+<link rel="stylesheet" href="{{ "photos/photos.css" | relURL }}">
+{{ end }}

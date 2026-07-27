@@ -1,0 +1,30 @@
+{{ define "main" }}
+{{- $albums := .Pages.ByDate.Reverse -}}
+{{- $featuredAlbums := where $albums "Params.featured" true -}}
+{{- $regularAlbums := where $albums "Params.featured" "ne" true -}}
+
+<div class="photos-page album-index">
+  <header class="photos-heading">
+    <h1>{{ .Title }}</h1>
+    <div class="photos-description">{{ .Content }}</div>
+  </header>
+
+  {{ if gt (len $featuredAlbums) 0 }}
+  <section class="featured-albums" aria-label="精选相册">
+    {{ range $featuredAlbums }}
+      {{ partial "album-card.html" (dict "page" . "featured" true) }}
+    {{ end }}
+  </section>
+  {{ end }}
+
+  {{ if gt (len $regularAlbums) 0 }}
+  <section class="album-grid" aria-label="全部相册">
+    {{ range $regularAlbums }}
+      {{ partial "album-card.html" (dict "page" . "featured" false) }}
+    {{ end }}
+  </section>
+  {{ else if eq (len $featuredAlbums) 0 }}
+  <p class="albums-empty">还没有已发布的相册。</p>
+  {{ end }}
+</div>
+{{ end }}

@@ -1,5 +1,6 @@
 roadnotfixed-blog/.hugo_build.lock
 roadnotfixed-blog/public/
+roadnotfixed-blog/resources/
 *.db
 .env
 watch_data.zip

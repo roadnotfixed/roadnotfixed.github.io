@@ -1,0 +1,81 @@
+{{ define "main" }}
+{{- $images := .Resources.ByType "image" -}}
+<div class="photos-page album-single">
+  <header class="photos-heading album-heading">
+    <p class="album-back"><a href="{{ "photos/" | relURL }}">← Photos</a></p>
+    <h1>{{ .Title }}</h1>
+    {{ with .Description }}<p class="album-description">{{ . }}</p>{{ end }}
+    {{ with .Content }}<div class="album-content">{{ . }}</div>{{ end }}
+    <p class="album-count">{{ len $images }} 张照片</p>
+  </header>
+
+  {{ if gt (len $images) 0 }}
+  <section class="photo-list" aria-label="{{ .Title }} 相册">
+    {{ range $index, $image := $images }}
+      {{- $smallWidth := 480 -}}
+      {{- if lt $image.Width $smallWidth -}}
+        {{- $smallWidth = $image.Width -}}
+      {{- end -}}
+      {{- $small := $image.Resize (printf "%dx webp q78" $smallWidth) -}}
+      {{- $medium := $small -}}
+      {{- if gt $image.Width $smallWidth -}}
+        {{- $mediumWidth := 960 -}}
+        {{- if lt $image.Width $mediumWidth -}}
+          {{- $mediumWidth = $image.Width -}}
+        {{- end -}}
+        {{- $medium = $image.Resize (printf "%dx webp q80" $mediumWidth) -}}
+      {{- end -}}
+      {{- $large := $medium -}}
+      {{- if gt $image.Width $medium.Width -}}
+        {{- $largeWidth := 1600 -}}
+        {{- if lt $image.Width $largeWidth -}}
+          {{- $largeWidth = $image.Width -}}
+        {{- end -}}
+        {{- $large = $image.Resize (printf "%dx webp q82" $largeWidth) -}}
+      {{- end -}}
+      {{- $alt := $image.Params.alt | default $image.Title | default $.Title -}}
+      {{- $caption := $image.Params.caption | default $image.Title -}}
+      <figure class="gallery-slide" style="aspect-ratio: {{ $image.Width }} / {{ $image.Height }};">
+        <a
+          class="gallery-item"
+          href="{{ $image.RelPermalink }}"
+          data-gallery-item
+          data-gallery-src="{{ $large.RelPermalink }}"
+          data-gallery-alt="{{ $alt }}"
+          data-gallery-caption="{{ $caption }}"
+        >
+          <img
+            src="{{ $medium.RelPermalink }}"
+            srcset="{{ $small.RelPermalink }} {{ $small.Width }}w{{ if gt $medium.Width $small.Width }}, {{ $medium.RelPermalink }} {{ $medium.Width }}w{{ end }}{{ if gt $large.Width $medium.Width }}, {{ $large.RelPermalink }} {{ $large.Width }}w{{ end }}"
+            sizes="(max-width: 700px) 100vw, 50vw"
+            width="{{ $image.Width }}"
+            height="{{ $image.Height }}"
+            alt="{{ $alt }}"
+            {{ if lt $index 2 }}loading="eager"{{ else }}loading="lazy"{{ end }}
+          >
+          {{ with $caption }}<span class="photo-caption">{{ . }}</span>{{ end }}
+        </a>
+      </figure>
+    {{ end }}
+    <div class="gallery-spacer" aria-hidden="true"></div>
+  </section>
+  {{ else }}
+  <p class="albums-empty">这个相册里还没有照片。</p>
+  {{ end }}
+
+  <dialog class="photo-lightbox" data-photo-lightbox aria-label="照片查看器">
+    <form method="dialog">
+      <button class="lightbox-close" aria-label="关闭照片查看器">×</button>
+    </form>
+    <button class="lightbox-nav lightbox-prev" type="button" data-lightbox-prev aria-label="上一张照片">←</button>
+    <figure class="lightbox-content">
+      <img data-lightbox-image alt="">
+      <figcaption>
+        <span data-lightbox-caption></span>
+        <a data-lightbox-original href="#" target="_blank" rel="noopener">查看原图 ↗</a>
+      </figcaption>
+    </figure>
+    <button class="lightbox-nav lightbox-next" type="button" data-lightbox-next aria-label="下一张照片">→</button>
+  </dialog>
+</div>
+{{ end }}

@@ -20,3 +20,32 @@ Refresh the public data before publishing new runs:
 ```text
 python scripts/export_running_data.py --db path/to/health.db --routes-zip path/to/watch_data.zip
 ```
+
+## Photo albums
+
+Photo albums are Hugo page bundles under `roadnotfixed-blog/content/photos/`.
+From the `roadnotfixed-blog` directory, create an album with:
+
+```text
+hugo new content --kind photos photos/my-album/index.md
+```
+
+Place the original JPEG, PNG, or WebP files beside `index.md`. Set `cover` in
+the album front matter to the preferred cover filename, and set `featured` to
+`true` to show the album in the large featured position. Hugo creates the
+responsive WebP variants during the site build; generated images should not be
+committed separately.
+
+Optional per-photo titles and alt text can be added to the album front matter:
+
+```toml
+[[resources]]
+src = "01.jpg"
+title = "A short visible caption"
+
+[resources.params]
+alt = "A concrete description of the photograph"
+```
+
+Preview draft albums with `hugo server -D`. Remove `draft = true` or set it to
+`false` when the album is ready to publish.

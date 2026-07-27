@@ -2,3 +2,6 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="{{ "running/running.js" | relURL }}"></script>
 {{ end }}
+{{ if and (eq .Section "photos") .IsPage }}
+<script src="{{ "photos/gallery.js" | relURL }}"></script>
+{{ end }}

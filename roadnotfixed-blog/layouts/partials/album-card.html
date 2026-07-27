@@ -1,0 +1,34 @@
+{{- $page := .page -}}
+{{- $featured := .featured | default false -}}
+{{- $images := $page.Resources.ByType "image" -}}
+{{- $cover := false -}}
+{{- with $page.Params.cover -}}
+  {{- $cover = $page.Resources.GetMatch . -}}
+{{- end -}}
+{{- if and (not $cover) (gt (len $images) 0) -}}
+  {{- $cover = index $images 0 -}}
+{{- end -}}
+
+<a class="album-card{{ if $featured }} album-card-featured{{ end }}" href="{{ $page.RelPermalink }}">
+  {{ with $cover }}
+    {{- $thumbnailWidth := 1200 -}}
+    {{- if lt .Width $thumbnailWidth -}}
+      {{- $thumbnailWidth = .Width -}}
+    {{- end -}}
+    {{- $thumbnail := .Resize (printf "%dx webp q82" $thumbnailWidth) -}}
+    <img
+      src="{{ $thumbnail.RelPermalink }}"
+      width="{{ $thumbnail.Width }}"
+      height="{{ $thumbnail.Height }}"
+      alt="{{ $page.Params.coverAlt | default $page.Title }}"
+      {{ if not $featured }}loading="lazy"{{ end }}
+    >
+  {{ else }}
+    <div class="album-card-placeholder" aria-hidden="true">PHOTO</div>
+  {{ end }}
+  <div class="album-card-copy">
+    <h2>{{ $page.Title }}</h2>
+    <span>{{ len $images }} 张照片</span>
+    {{ with $page.Description }}<p>{{ . }}</p>{{ end }}
+  </div>
+</a>
