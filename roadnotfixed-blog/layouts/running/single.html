@@ -24,6 +24,27 @@
     </aside>
 
     <div class="running-main-column">
+      <div class="running-secondary">
+        <section class="running-data-section running-heatmap-section">
+          <div class="running-section-heading">
+            <div>
+              <p class="running-panel-label">CONSISTENCY</p>
+              <h2 id="running-heatmap-title">跑步热力图</h2>
+            </div>
+            <div class="running-legend" aria-label="热力图图例">
+              <span>少</span><i data-level="0"></i><i data-level="1"></i><i data-level="2"></i><i data-level="3"></i><i data-level="4"></i><span>多</span>
+            </div>
+          </div>
+          <div id="running-heatmap" class="running-heatmap" aria-label="每日跑步距离"></div>
+        </section>
+
+        <section class="running-data-section running-monthly-section">
+          <p class="running-panel-label">MONTHLY DISTANCE</p>
+          <h2>月跑量</h2>
+          <div id="running-monthly" class="running-monthly" aria-label="每月跑步距离"></div>
+        </section>
+      </div>
+
       <section class="running-map-stage">
         <div class="running-section-heading running-map-heading">
           <div>
@@ -61,27 +82,6 @@
         </div>
       </section>
     </div>
-  </div>
-
-  <div class="running-secondary">
-    <section class="running-data-section running-heatmap-section">
-      <div class="running-section-heading">
-        <div>
-          <p class="running-panel-label">CONSISTENCY</p>
-          <h2 id="running-heatmap-title">跑步热力图</h2>
-        </div>
-        <div class="running-legend" aria-label="热力图图例">
-          <span>少</span><i data-level="0"></i><i data-level="1"></i><i data-level="2"></i><i data-level="3"></i><i data-level="4"></i><span>多</span>
-        </div>
-      </div>
-      <div id="running-heatmap" class="running-heatmap" aria-label="每日跑步距离"></div>
-    </section>
-
-    <section class="running-data-section running-monthly-section">
-      <p class="running-panel-label">MONTHLY DISTANCE</p>
-      <h2>月跑量</h2>
-      <div id="running-monthly" class="running-monthly" aria-label="每月跑步距离"></div>
-    </section>
   </div>
 
   <p class="running-credit">

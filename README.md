@@ -49,3 +49,13 @@ alt = "A concrete description of the photograph"
 
 Preview draft albums with `hugo server -D`. Remove `draft = true` or set it to
 `false` when the album is ready to publish.
+
+## Links and RSS
+
+Edit `roadnotfixed-blog/content/links.md` to add or update friend links. Keep
+each entry in the simple Markdown form `[Site name](https://example.com/) - A
+short description.`
+
+The article RSS feed is generated automatically at `/blog/index.xml`. The site
+advertises this feed in every page's HTML metadata and links to it from the
+footer; no separate feed file needs to be maintained.

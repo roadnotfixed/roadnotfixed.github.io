@@ -1,0 +1,32 @@
+.links-page {
+  margin: 34px 0 54px;
+}
+
+.links-page > h1 {
+  margin-bottom: 24px;
+}
+
+.links-content h2 {
+  margin-top: 38px;
+  padding-bottom: 7px;
+  border-bottom: 1px solid #dedbd6;
+}
+
+.links-content ul {
+  padding-left: 0;
+  list-style: none;
+}
+
+.links-content li {
+  margin: 12px 0;
+}
+
+.links-content li a {
+  font-weight: 600;
+}
+
+@media (prefers-color-scheme: dark) {
+  .links-content h2 {
+    border-color: #4a4540;
+  }
+}

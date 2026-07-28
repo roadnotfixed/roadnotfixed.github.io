@@ -127,13 +127,13 @@
   grid-template-columns: 380px minmax(0, 1fr);
   gap: 68px;
   align-items: start;
+  border-top: 1px solid var(--run-divider);
 }
 
 .running-summary {
   position: sticky;
   top: 20px;
   padding: 28px 0 30px;
-  border-top: 1px solid var(--run-divider);
   border-bottom: 1px solid var(--run-divider);
 }
 
@@ -301,14 +301,14 @@
 .running-secondary {
   display: grid;
   grid-template-columns: minmax(0, 1.7fr) minmax(290px, 1fr);
-  gap: 58px;
-  margin: 62px 0 0;
+  gap: 42px;
+  margin: 0 0 32px;
+  padding: 24px 0 28px;
+  border-bottom: 1px solid #d6d3d1;
 }
 
 .running-data-section {
   min-width: 0;
-  padding-top: 24px;
-  border-top: 1px solid var(--run-divider);
 }
 
 .running-legend {
@@ -411,6 +411,7 @@
   .running-summary {
     position: static;
   }
+
 }
 
 @media (max-width: 760px) {

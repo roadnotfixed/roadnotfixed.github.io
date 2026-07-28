@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ with .Site.LanguageCode }}{{ . }}{{ else }}en-US{{ end }}">
+<html lang="{{ with .Site.Language.Locale }}{{ . }}{{ else }}en-US{{ end }}">
 
 <head>
   <meta http-equiv="X-Clacks-Overhead" content="GNU Terry Pratchett" />
@@ -11,8 +11,10 @@
   {{- partial "seo_tags.html" . -}}
   <meta name="referrer" content="no-referrer-when-downgrade" />
 
-  {{ with .OutputFormats.Get "rss" -}}
-  {{ printf `<link rel="%s" type="%s" href="%s" title="%s" />` .Rel .MediaType.Type .Permalink $.Site.Title | safeHTML }}
+  {{ with .Site.GetPage "/blog" -}}
+    {{ with .OutputFormats.Get "rss" -}}
+    {{ printf `<link rel="%s" type="%s" href="%s" title="%s" />` .Rel .MediaType.Type .Permalink $.Site.Title | safeHTML }}
+    {{ end -}}
   {{ end -}}
 
   {{- partial "style.html" . -}}

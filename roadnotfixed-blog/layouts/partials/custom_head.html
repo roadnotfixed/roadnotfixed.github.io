@@ -11,3 +11,6 @@
 {{ if eq .Section "photos" }}
 <link rel="stylesheet" href="{{ "photos/photos.css" | relURL }}">
 {{ end }}
+{{ if eq .Type "links" }}
+<link rel="stylesheet" href="{{ "links/links.css" | relURL }}">
+{{ end }}

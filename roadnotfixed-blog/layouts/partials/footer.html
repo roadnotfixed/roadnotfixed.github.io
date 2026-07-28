@@ -1,1 +1,4 @@
-{{ if ne .Site.Params.hideMadeWithLine true }}Made with <a href="https://github.com/janraasch/hugo-bearblog/">Hugo ʕ•ᴥ•ʔ Bear</a>{{ end }}
+{{ with .Site.GetPage "/blog" }}
+  {{ with .OutputFormats.Get "rss" }}Subscribe via <a href="{{ .RelPermalink }}">RSS</a>.{{ end }}
+{{ end }}
+{{ if ne .Site.Params.hideMadeWithLine true }}<br>Made with <a href="https://github.com/janraasch/hugo-bearblog/">Hugo ʕ•ᴥ•ʔ Bear</a>{{ end }}

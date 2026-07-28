@@ -1,8 +1,28 @@
 baseURL = 'https://roadnotfixed.github.io/'
-languageCode = 'en-us'
+locale = 'en-US'
 title = 'Narrenschiff'
 theme = 'hugo-bearblog'
 enableRobotsTXT = true
+
+[[menus.main]]
+  name = 'Blog'
+  pageRef = '/blog'
+  weight = 10
+
+[[menus.main]]
+  name = 'Photo'
+  pageRef = '/photos'
+  weight = 20
+
+[[menus.main]]
+  name = 'Running'
+  pageRef = '/running'
+  weight = 30
+
+[[menus.main]]
+  name = 'Links'
+  pageRef = '/links'
+  weight = 40
 
 [params]
   description = 'Narrenschiff'
