@@ -1,0 +1,29 @@
+{{ define "main" }}
+{{- $events := sort hugo.Data.timeline "date" "desc" -}}
+<article class="timeline-page">
+  <header class="timeline-heading">
+    <h1>{{ .Title }}</h1>
+    <div class="timeline-intro">{{ .Content }}</div>
+  </header>
+
+  {{ if gt (len $events) 0 }}
+  <ol class="timeline-list">
+    {{ range $events }}
+      {{- $date := time.AsTime .date -}}
+      <li class="timeline-item">
+        <time class="timeline-date" datetime="{{ .date }}">
+          {{ $date.Format "2006年1月2日" }}
+        </time>
+        <span class="timeline-marker" aria-hidden="true"></span>
+        <div class="timeline-entry">
+          <h2>{{ .event }}</h2>
+          <p class="timeline-description">{{ .description }}</p>
+        </div>
+      </li>
+    {{ end }}
+  </ol>
+  {{ else }}
+  <p>还没有时间线记录。</p>
+  {{ end }}
+</article>
+{{ end }}

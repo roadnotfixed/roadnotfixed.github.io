@@ -12,12 +12,17 @@ enableRobotsTXT = true
 [[menus.main]]
   name = 'Photo'
   pageRef = '/photos'
-  weight = 20
+  weight = 15
 
 [[menus.main]]
   name = 'Running'
   pageRef = '/running'
-  weight = 30
+  weight = 20
+
+[[menus.main]]
+  name = 'Timeline'
+  pageRef = '/timeline'
+  weight = 25
 
 [[menus.main]]
   name = 'Links'

@@ -14,3 +14,6 @@
 {{ if eq .Type "links" }}
 <link rel="stylesheet" href="{{ "links/links.css" | relURL }}">
 {{ end }}
+{{ if eq .Type "timeline" }}
+<link rel="stylesheet" href="{{ "timeline/timeline.css" | relURL }}">
+{{ end }}

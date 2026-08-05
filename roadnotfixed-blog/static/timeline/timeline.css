@@ -1,0 +1,119 @@
+.timeline-page {
+  margin: 34px 0 60px;
+}
+
+.timeline-heading {
+  margin-bottom: 42px;
+}
+
+.timeline-heading h1 {
+  margin-bottom: 10px;
+}
+
+.timeline-intro p {
+  margin: 0;
+  color: #6e6963;
+}
+
+.timeline-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.timeline-item {
+  position: relative;
+  min-height: 120px;
+  margin-left: 154px;
+  padding: 0 0 48px 34px;
+  border-left: 1px solid #d6d3d1;
+}
+
+.timeline-item:last-child {
+  min-height: 0;
+  padding-bottom: 0;
+  border-left-color: transparent;
+}
+
+.timeline-date {
+  position: absolute;
+  top: -2px;
+  left: -174px;
+  width: 138px;
+  color: #6e6963;
+  font-size: 0.78rem;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.timeline-marker {
+  position: absolute;
+  top: 2px;
+  left: -6px;
+  width: 9px;
+  height: 9px;
+  border: 1px solid #3273dc;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 0 4px #fff;
+}
+
+.timeline-entry h2 {
+  margin: 0 0 8px;
+  font-size: 1.18rem;
+  line-height: 1.45;
+}
+
+.timeline-description {
+  margin: 0;
+  color: #6e6963;
+  font-size: 0.88rem;
+  line-height: 1.6;
+}
+
+@media (max-width: 620px) {
+  .timeline-heading {
+    margin-bottom: 32px;
+  }
+
+  .timeline-item {
+    margin-left: 5px;
+    padding: 0 0 42px 25px;
+  }
+
+  .timeline-date {
+    position: static;
+    display: block;
+    width: auto;
+    margin-bottom: 8px;
+    text-align: left;
+  }
+
+  .timeline-marker {
+    top: 4px;
+  }
+
+}
+
+@media (prefers-color-scheme: dark) {
+  .timeline-intro p,
+  .timeline-date,
+  .timeline-description {
+    color: #b9b3ab;
+  }
+
+  .timeline-item {
+    border-left-color: #55514b;
+  }
+
+  .timeline-item:last-child {
+    border-left-color: transparent;
+  }
+
+  .timeline-marker {
+    border-color: #8cc2dd;
+    background: #333;
+    box-shadow: 0 0 0 4px #333;
+  }
+
+}

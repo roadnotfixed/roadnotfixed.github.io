@@ -59,3 +59,16 @@ short description.`
 The article RSS feed is generated automatically at `/blog/index.xml`. The site
 advertises this feed in every page's HTML metadata and links to it from the
 footer; no separate feed file needs to be maintained.
+
+## Timeline
+
+Edit `roadnotfixed-blog/data/timeline.yaml` to add timeline entries. Keep the
+date in `YYYY-MM-DD` format so Hugo can sort entries automatically:
+
+```yaml
+- date: "2026-01-01"
+  event: "What happened in the world"
+  description: "Where I was and what I was doing"
+```
+
+The Timeline page sorts entries newest first.
