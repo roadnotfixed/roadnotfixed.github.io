@@ -9,10 +9,16 @@
   {{ if gt (len $events) 0 }}
   <ol class="timeline-list">
     {{ range $events }}
-      {{- $date := time.AsTime .date -}}
+      {{- $dateValue := printf "%v" .date -}}
+      {{- $dateDisplay := $dateValue -}}
+      {{- if findRE `^\d{4}-\d{2}-\d{2}$` $dateValue -}}
+        {{- $dateDisplay = (time.AsTime $dateValue).Format "2006年1月2日" -}}
+      {{- else if findRE `^\d{4}-\d{2}$` $dateValue -}}
+        {{- $dateDisplay = printf "%s年%s月" (substr $dateValue 0 4) (strings.TrimLeft "0" (substr $dateValue 5 2)) -}}
+      {{- end -}}
       <li class="timeline-item">
-        <time class="timeline-date" datetime="{{ .date }}">
-          {{ $date.Format "2006年1月2日" }}
+        <time class="timeline-date" datetime="{{ $dateValue }}">
+          {{ $dateDisplay }}
         </time>
         <span class="timeline-marker" aria-hidden="true"></span>
         <div class="timeline-entry">
