@@ -1,4 +1,8 @@
-- date: "2026-06-11"
+- date: "2026-07-02"
+  event: "林榮基病逝"
+  description: "香港銅鑼灣書店店長林榮基在台北病逝，終年70歲。"
+
+- date: "2026-06"
   event: "FIFA World Cup 2026"
   description: ""
 
@@ -30,6 +34,10 @@
   event: "台湾大罢免运动"
   description: "台灣史上最大規模的「大罷免」行動，公民團體對多名國民黨立委及新竹市長高虹安發起罷免連署。中選會分別於7月26日與8月23日舉行多場罷免投票，最終所有罷免案均未通過"
 
+- date: "2025-01-23"
+  event: "泰国同性婚姻法案正式生效"
+  description: ""
+
 - date: "2024-11-06"
   event: "Donald Trump 赢得2024年美国总统选举"
   description: ""
@@ -38,12 +46,16 @@
   event: "赖清德、萧美琴当选中华民国第16任总统、副总统。"
   description: ""
 
-- date: "2023-12-27"
-  event: "李善均逝世"
-  description: ""
+- date: "2023-11-29"
+  event: "尼泊尔同性婚姻合法"
+  description: "Same-sex couples remained in legal limbo until 18 June 2026, when the Supreme Court delivered a final verdict in the case, ordering the government to recognise same-sex marriages."
 
 - date: "2023-10-06"
   event: "加沙战争"
+  description: ""
+
+- date: "2023-07-11"
+  event: "米兰昆德拉逝世"
   description: ""
 
 - date: "2022-12-07"
@@ -56,7 +68,8 @@
 
 - date: "2022-11-24"
   event: "乌鲁木齐大火"
-  description: "26日南京传媒学院一名学生手持白纸抗议，引发白纸运动。随后多地民众聚集街头抗议，以上海乌鲁木齐中路与北京亮马桥为代表。"
+  description: "26日南京传媒学院一名学生手持白纸抗议，引发白纸运动。随后多地民众聚集街头抗议，以上海乌鲁木齐中路与北京亮马桥为代表。
+    在此之前，iOS 16.1.1 为国行用户特供 10-minutes Airdop for everyone，并在之后的 iOS 16.2 版本中全球推行。"
 
 - date: "2022-10-13"
   event: "四通桥事件"
@@ -77,6 +90,10 @@
 - date: "2022-03-27"
   event: "上海封城"
   description: "至6月1日解封"
+
+- date: "2022-03-21"
+  event: "中国东方航空5735号班机空难"
+  description: "2026年4月29日NTSB公布了所有备份的 FDR（飞行数据记录器）MU5735 航班的数据。飞行数据记录器（FDR）显示的情况如下：在飞机最初失控的瞬间，两台发动机被同时关闭。两台发动机的切断开关均从“运行（RUN）”位置被拨至“切断（CUTOFF）”位置——这不是机械故障，而是蓄意行为。"
 
 - date: "2022-02-24"
   event: "俄罗斯全面入侵乌克兰"
@@ -102,6 +119,14 @@
   event: "弦子诉朱军案"
   description: "弦子诉朱军性骚扰损害责任纠纷案于海淀区人民法院开庭。2021年9月14日，北京市海淀法院不公开审理后认为弦子提交的证据不足以证明朱军性骚扰，一审驳回其诉讼请求。2022年8月10日，二审不公开审理后维持原判。"
 
+- date: "2020-09-18"
+  event: "Ruth Bader Ginsburg 逝世"
+  description: ""
+
+- date: "2020-06-30"
+  event: "香港颁布《国安法》"
+  description: ""
+
 - date: "2020-03-11"
   event: "波士顿 lockdown"
   description: ""
@@ -120,6 +145,10 @@
 
 - date: "2019-06-04"
   event: "六四三十周年"
+  description: ""
+
+- date: "2019-05-24"
+  event: "台湾同性婚姻法案正式生效"
   description: ""
 
 - date: "2018-07-27"
@@ -146,21 +175,69 @@
   event: "Donald Trump发表就职演说"
   description: ""
 
+- date: "2016-06-24"
+  event: "英国脱欧公投"
+  description: ""
+
 - date: "2016-05-07"
   event: "雷洋事件"
   description: ""
+
+- date: "2016-03-09"
+  event: "AlphaGo 对弈韩国九段选手李世石"
+  description: "AlphaGo 4:1 胜出，后于5月以3:0战胜柯洁"
+
+- date: "2016-01-16"
+  event: "蔡英文当选台湾历史上首位女总统"
+  description: ""
+
+- date: "2015-06-26"
+  event: "美国同婚合法"
+  description: "Obergefell v. Hodges: U.S. Supreme Court case finding state bans on same-sex marriage to be unconstitutional under the 14th Amendment.  "
+
+- date: "2015-01-07"
+  event: "查理周刊恐怖袭击"
+  description: "遇难者包括两名警员和多位周刊工作人员，其中一位是周刊主编"
 
 - date: "2015-07-09"
   event: "709律师大抓捕"
   description: ""
 
+- date: "2014-12-31"
+  event: "上海外滩踩踏事故"
+  description: "事故造成36死、49伤（13重伤）"
+
 - date: "2014-09-26"
   event: "雨伞革命"
   description: "9月28日 占领中环"
 
+- date: "2014-04-17"
+  event: "马尔克斯逝世"
+  description: "《百年孤独》作者，1982年获诺贝尔文学奖。"
+
+- date: "2014-04-16"
+  event: "世越号沉没事故"
+  description: "304人罹难，其中多数为高中生。"
+
+- date: "2014-04-15"
+  event: "波士顿马拉松爆炸案"
+  description: ""
+
 - date: "2014-03-18"
   event: "太阳花学运"
   description: ""
+
+- date: "2014-03-08"
+  event: "马航MH370航班失踪"
+  description: ""
+
+- date: "2014-03-01"
+  event: "昆明火车站暴力恐怖袭击"
+  description: ""
+
+- date: "2013-01-01"
+  event: "《南方周末》新年献词事件"
+  description: "《南方周末》新年特刊被中共广东省委宣传部干预编辑自由，新年献词被原新华社副社长庹震篡改。卷首的“中国梦·宪政梦”的“之难”改成了“比任何时候都更接近梦想”。南方周末记者及后发布相关消息，随后南周编辑部南方大院外聚集大批声援人士，手持菊花或标语表达抗议、要求言论自由及中国宪政民主。"
 
 - date: "2012-09"
   event: "钓鱼岛事件"
@@ -168,16 +245,40 @@
 
 - date: "2011-03-11"
   event: "東日本大震災"
-  description: "日本宫城县牡鹿半岛东南偏东130千米的西北太平洋海域处发生了矩震级9.0的强烈地震，这场地震还引发了巨大海啸。"
+  description: "日本宫城县牡鹿半岛东南偏东130千米的西北太平洋海域处发生了矩震级9.0的强烈地震，这场地震还引发了巨大海啸。福岛第一核电站冷却系统失效，引发核泄漏事故。"
+
+- date: "2010-05-01"
+  event: "上海世博会"
+  description: ""
+
+- date: "2009-07-05"
+  event: "乌鲁木齐七五事件"
+  description: ""
 
 - date: "2008-05-12"
   event: "汶川地震"
   description: ""
 
+- date: "2008-01"
+  event: "全国雪灾"
+  description: ""
+
+- date: "2003-10-15"
+  event: "神舟五号载人航天发射成功"
+  description: "杨利伟为当时的航天员"
+
 - date: "2003-04-01"
   event: "张国荣逝世"
   description: "2003年4月1日下午6时43分，张国荣从香港中环文华东方酒店24楼健身房室内跳楼自杀"
 
+- date: "2003-02"
+  event: "SARS爆发"
+  description: ""
+
 - date: "2003-02-24"
   event: "孙志刚之死"
   description: "2003年6月20日，中华人民共和国国务院公布《城市生活无着的流浪乞讨人员救助管理办法》，自2003年8月1日起执行。《城市流浪乞讨人员收容遣送办法》同时废止。"
+
+- date: "2001-04-01"
+  event: "荷兰同性婚姻合法正式生效"
+  description: "荷兰正式成为世界上第一个承认同性婚姻合法的国家。"
