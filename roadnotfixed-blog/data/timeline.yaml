@@ -10,6 +10,10 @@
   event: "Artemis II成功发射"
   description: ""
 
+- date: "2026-02-09"
+  event: "黎智英被判20年"
+  description: "香港国安法实施以来最严重判刑，宣告香港的自由与司法独立名存实亡。"
+
 - date: "2026-02-28"
   event: "美伊战争"
   description: ""
@@ -17,6 +21,10 @@
 - date: "2025-11-26"
   event: "香港宏福苑五級大火"
   description: "此次火灾事故造成168人死亡（包括1名消防员殉职）、79人受伤。同时也是香港主权移交以来伤亡最严重的火灾"
+
+- date: "2025-06-07"
+  event: "最后一届藏语高考"
+  description: ""
 
 - date: "2025-04-21"
   event: "方济各病逝"
@@ -42,6 +50,10 @@
   event: "Donald Trump 赢得2024年美国总统选举"
   description: ""
 
+- date: "2024-06-07"
+  event: "最后一届蒙古语高考"
+  description: ""
+
 - date: "2024-01-13"
   event: "赖清德、萧美琴当选中华民国第16任总统、副总统。"
   description: ""
@@ -64,7 +76,7 @@
 
 - date: "2022-11-30"
   event: "江泽民逝世"
-  description: ""
+  description: "于上海华东医院逝世。12月6日，中共在人民大会堂为其举行了追悼大会。后全面解封。"
 
 - date: "2022-11-24"
   event: "乌鲁木齐大火"
@@ -109,7 +121,7 @@
 
 - date: "2021-05-10"
   event: "编程随想消失"
-  description: "阮晓寰被上海警方以涉嫌煽动颠覆国家政权罪逮捕。。2023年2月10日，上海市第二中级人民法院以煽动颠覆国家政权罪判处其有期徒刑7年"
+  description: "阮晓寰被上海警方以涉嫌煽动颠覆国家政权罪逮捕。2023年2月10日，上海市第二中级人民法院以煽动颠覆国家政权罪判处其有期徒刑7年"
 
 - date: "2021-01-06"
   event: "United States Capitol attack"
@@ -123,13 +135,17 @@
   event: "Ruth Bader Ginsburg 逝世"
   description: ""
 
+- date: "2020-08-26"
+  event: "内蒙古家长抗议双语教育新政"
+  description: "内蒙古教育厅要求从9月1日起，全自治区所有中、小学一年级新学期起中止使用蒙古族母语教学。"
+
 - date: "2020-06-30"
   event: "香港颁布《国安法》"
-  description: ""
+  description: "其法具有域外效力，对逃离香港后的港人也有震慑效果。"
 
 - date: "2020-03-11"
-  event: "波士顿 lockdown"
-  description: ""
+  event: "波士顿 Lockdown"
+  description: "10日最后一门线下课我完成了一个presentation，自那后再也没见过同班同学。"
 
 - date: "2020-02-07"
   event: "李文亮医生抢救无效身亡"
@@ -137,18 +153,34 @@
 
 - date: "2020-01-01"
   event: "跨年"
-  description: ""
+  description: "这一年跨年我在伦敦，和朋友一起等了五个小时看烟花。"
+
+- date: "2019-11-13"
+  event: "保卫理大"
+  description: "因周梓乐之死引发多间院校的黎明行动，发起三罢。香港警察在11月17日封锁理工大学，并阻止在校内的示威者离开。警察最终在11月28日进入理工大学内搜查，并在29日正式解除封锁。"
 
 - date: "2019-08-09"
   event: "香港国际机场反对逃犯条例修订草案抗议活动"
-  description: ""
+  description: "14日环球时报记者付国豪被示威者包围及殴打，后消息上热搜。是我印象中反送中运动里第一次在微博上可以不被屏蔽或炸号讨论。随后港府批准临时禁制令开始赶走抗议者。我是8月21日当天从香港机场出发去美国，沿街马路还能看到标语，但机场已经没有抗议者。"
+
+- date: "2019-07-21"
+  event: "元朗暴力袭击事件"
+  description: "大批白衣人在元朗无差别袭击民众及反修例示威者，致多人受伤。自此返修例运动中的警民冲突上了新台阶，衍生出“警黑勾结”指控。"
+
+- date: "2019-06-16"
+  event: "616大游行"
+  description: "提出五大诉求：1. 撤回《逃犯条例修订草案》；2.撤回“暴动”定性（最初针对612金钟冲突）； 3. 撤销所有反送中示威者控罪； 4. 成立独立调查委员会追究警方暴力执法；5. 立即实行真普选。主办单位公布游行有200万零1人参与，是香港史上主办方公布最多人参加的游行。"
 
 - date: "2019-06-04"
   event: "六四三十周年"
-  description: ""
+  description: "亦为香港维园最后一年自由集会"
 
 - date: "2019-05-24"
   event: "台湾同性婚姻法案正式生效"
+  description: ""
+
+- date: "2019-03"
+  event: "香港反送中运动初期抗议开始"
   description: ""
 
 - date: "2018-07-27"
@@ -191,17 +223,21 @@
   event: "蔡英文当选台湾历史上首位女总统"
   description: ""
 
+- date: "2015-07-09"
+  event: "709律师大抓捕"
+  description: ""
+
 - date: "2015-06-26"
   event: "美国同婚合法"
   description: "Obergefell v. Hodges: U.S. Supreme Court case finding state bans on same-sex marriage to be unconstitutional under the 14th Amendment.  "
 
+- date: "2015-06-07"
+  event: "广东省最后一年自主命题高考"
+  description: ""
+
 - date: "2015-01-07"
   event: "查理周刊恐怖袭击"
   description: "遇难者包括两名警员和多位周刊工作人员，其中一位是周刊主编"
-
-- date: "2015-07-09"
-  event: "709律师大抓捕"
-  description: ""
 
 - date: "2014-12-31"
   event: "上海外滩踩踏事故"
