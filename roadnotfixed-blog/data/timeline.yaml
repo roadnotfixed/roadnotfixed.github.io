@@ -183,6 +183,10 @@
   event: "香港反送中运动初期抗议开始"
   description: ""
 
+- date: "2019-02-19"
+  event: "《还愿》发行"
+  description: "因游戏场景内符咒争议，2月23日《还愿》在Steam中国区下架，从此赤柱游戏相关被封杀，包括首作《返校》。"
+
 - date: "2018-07-27"
   event: "深圳7·27维权工人被捕事件"
   description: "8月24日凌晨五点，警方对声援团驻地进行暴力清场，包括岳昕在内的五十余名工人和学生被拘捕。"
@@ -228,7 +232,7 @@
   description: ""
 
 - date: "2015-06-26"
-  event: "美国同婚合法"
+  event: "美国全国范围内同性婚姻合法"
   description: "Obergefell v. Hodges: U.S. Supreme Court case finding state bans on same-sex marriage to be unconstitutional under the 14th Amendment.  "
 
 - date: "2015-06-07"
