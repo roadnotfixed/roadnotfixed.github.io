@@ -99,6 +99,10 @@
   event: "伊丽莎白二世逝世"
   description: ""
 
+- date: "2022-06-24"
+  event: "美国全国堕胎法案被推翻"
+  description: "Supreme Court overturned Roe v. Wade in a 6-3 majority vote. 多数意见指出，堕胎不是一项宪法权利，此案推翻了罗诉韦德案和计划生育联合会诉凯西案，并且各州在规范堕胎方面应该有自由裁量权。"
+
 - date: "2022-03-27"
   event: "上海封城"
   description: "至6月1日解封"
