@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import math
 import re
@@ -46,7 +47,10 @@ class RoutePoint:
 
 
 def parse_datetime(value: str) -> datetime:
-    parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+    try:
+        parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+    except ValueError:
+        parsed = datetime.strptime(value, "%Y-%m-%d %H:%M:%S %z")
     if parsed.tzinfo is None:
         parsed = parsed.replace(tzinfo=timezone.utc)
     return parsed
@@ -110,6 +114,100 @@ def read_workouts(db_path: Path, min_distance_km: float) -> list[Workout]:
             )
         )
     return workouts
+
+
+def read_export_workout(element: ET.Element, min_distance_km: float) -> Optional[Workout]:
+    attrs = element.attrib
+    workout_type = attrs.get("workoutActivityType", "")
+    if "running" not in workout_type.lower() and "跑步" not in workout_type:
+        return None
+
+    distance_value = attrs.get("totalDistance")
+    distance_unit = attrs.get("totalDistanceUnit", "km")
+    heart_rates: list[float] = []
+    for child in element:
+        if child.tag.rsplit("}", 1)[-1] != "WorkoutStatistics":
+            continue
+        stat = child.attrib
+        if stat.get("type") == "HKQuantityTypeIdentifierDistanceWalkingRunning":
+            if distance_value is None:
+                distance_value = stat.get("sum")
+                distance_unit = stat.get("unit", "km")
+        elif stat.get("type") == "HKQuantityTypeIdentifierHeartRate":
+            try:
+                average = float(stat["average"])
+                if 20 <= average <= 260:
+                    heart_rates.append(average)
+            except (KeyError, TypeError, ValueError):
+                pass
+
+    distance_factors = {"km": 1.0, "m": 0.001, "mi": 1.609344}
+    duration_factors = {"min": 1.0, "s": 1 / 60.0, "sec": 1 / 60.0, "h": 60.0, "hr": 60.0}
+    try:
+        distance = float(distance_value) * distance_factors[distance_unit]
+        duration = float(attrs["duration"]) * duration_factors[attrs.get("durationUnit", "min")]
+        start = parse_datetime(attrs["startDate"])
+        end = parse_datetime(attrs["endDate"])
+    except (KeyError, TypeError, ValueError):
+        return None
+    if not math.isfinite(distance) or not math.isfinite(duration):
+        return None
+    if duration <= 0 or distance < min_distance_km or end < start:
+        return None
+
+    start_utc = start.astimezone(timezone.utc)
+    end_utc = end.astimezone(timezone.utc)
+    identity = json.dumps(
+        [workout_type, attrs.get("sourceName", ""), start_utc.isoformat(), end_utc.isoformat()],
+        ensure_ascii=False,
+        separators=(",", ":"),
+    )
+    return Workout(
+        workout_hash=hashlib.sha256(identity.encode("utf-8")).hexdigest(),
+        start_text=start.isoformat(),
+        start_utc=start_utc,
+        end_utc=end_utc,
+        date=start.date().isoformat(),
+        duration_min=duration,
+        distance_km=distance,
+        avg_hr_bpm=int(round(sum(heart_rates) / len(heart_rates))) if heart_rates else None,
+    )
+
+
+def read_workouts_from_zip(export_zip: Path, min_distance_km: float) -> list[Workout]:
+    """Read only workouts; discard other XML nodes as they finish to bound memory."""
+    workouts: dict[str, Workout] = {}
+    seen = duplicates = 0
+    with zipfile.ZipFile(export_zip) as archive:
+        members = [
+            info for info in archive.infolist()
+            if info.filename.replace("\\", "/").rsplit("/", 1)[-1].lower() == "export.xml"
+            and not info.filename.startswith("__MACOSX/")
+        ]
+        if len(members) != 1:
+            raise ValueError("Expected exactly one export.xml inside the Apple Health ZIP.")
+        with archive.open(members[0]) as stream:
+            events = iter(ET.iterparse(stream, events=("start", "end")))
+            _event, root = next(events)
+            in_workout = False
+            for event, element in events:
+                tag = element.tag.rsplit("}", 1)[-1]
+                if event == "start":
+                    if tag == "Workout":
+                        in_workout = True
+                    continue
+                if tag == "Workout":
+                    seen += 1
+                    workout = read_export_workout(element, min_distance_km)
+                    if workout is not None:
+                        duplicates += int(workout.workout_hash in workouts)
+                        workouts[workout.workout_hash] = workout
+                    in_workout = False
+                if not in_workout:
+                    element.clear()
+                    root.clear()
+    print(f"Scanned {seen} workouts; merged {duplicates} UTC duplicate runs.", flush=True)
+    return sorted(workouts.values(), key=lambda workout: workout.start_utc)
 
 
 def index_routes(archive: zipfile.ZipFile, earliest_date: str) -> list[Route]:
@@ -331,7 +429,9 @@ def main() -> int:
     parser = argparse.ArgumentParser(
         description="Export privacy-filtered Apple Health running data for the Hugo site."
     )
-    parser.add_argument("--db", required=True, type=Path, help="Path to health.db")
+    source = parser.add_mutually_exclusive_group(required=True)
+    source.add_argument("--db", type=Path, help="Path to health.db")
+    source.add_argument("--health-zip", type=Path, help="Read workouts and routes directly from an Apple Health ZIP")
     parser.add_argument(
         "--min-distance-km",
         type=float,
@@ -367,12 +467,15 @@ def main() -> int:
         raise SystemExit("--max-route-points must be at least 2")
     if args.min_distance_km < 0:
         raise SystemExit("--min-distance-km cannot be negative")
-    workouts = read_workouts(args.db, args.min_distance_km)
+    if args.health_zip is not None:
+        workouts = read_workouts_from_zip(args.health_zip, args.min_distance_km)
+    else:
+        workouts = read_workouts(args.db, args.min_distance_km)
     if not workouts:
         raise SystemExit("No valid running workouts were found; output was not changed.")
     activities, route_count = build_activities(
         workouts,
-        routes_zip=args.routes_zip,
+        routes_zip=args.routes_zip or args.health_zip,
         trim_meters=args.trim_meters,
         max_route_points=args.max_route_points,
     )
