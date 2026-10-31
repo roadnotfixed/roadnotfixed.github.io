@@ -86,7 +86,7 @@ def public_stats(json_path: Path) -> tuple[int, float, int, int, str]:
         len(activities),
         round(sum(float(item.get("distance_km") or 0) for item in activities), 1),
         sum(item.get("avg_hr_bpm") is not None for item in activities),
-        sum(bool(item.get("route")) for item in activities),
+        sum(bool(item.get("route") or item.get("route_segments")) for item in activities),
         max((str(item.get("date") or "") for item in activities), default=""),
     )
 
@@ -139,11 +139,12 @@ def update_from_zip(export_zip: Path) -> int:
     latest_year = public[4][:4]
     year_items = [item for item in payload["activities"] if item["date"].startswith(latest_year + "-")]
     year_distance = sum(float(item["distance_km"]) for item in year_items)
+    year_recordings = sum(len(item.get("segments", [item])) for item in year_items)
     print(
         f"\nRunning Page refreshed: runs={public[0]}, total_km={public[1]:.1f}, "
         f"HR={public[2]}, routes={public[3]}, latest={public[4]}"
     )
-    print(f"{latest_year} YTD: {year_distance:.1f} km / {len(year_items)} runs")
+    print(f"{latest_year} YTD: {year_distance:.1f} km / {len(year_items)} sessions / {year_recordings} recordings")
     if backup_path is not None:
         print(f"Previous Running JSON backup: {backup_path}")
     print("No commit or push was performed.")

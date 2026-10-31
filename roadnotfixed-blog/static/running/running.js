@@ -28,6 +28,19 @@
     return items.reduce((sum, item) => sum + item.distance_km, 0);
   }
 
+  function routeSegments(item) {
+    if (Array.isArray(item.route_segments)) {
+      return item.route_segments.filter((segment) => Array.isArray(segment) && segment.length >= 2);
+    }
+    return Array.isArray(item.route) && item.route.length >= 2 ? [item.route] : [];
+  }
+
+  function mergedLabel(item) {
+    return Array.isArray(item.segments) && item.segments.length > 1
+      ? `合并 ${item.segments.length} 段`
+      : '';
+  }
+
   function durationTotal(items) {
     return items.reduce((sum, item) => sum + item.duration_min, 0);
   }
@@ -178,11 +191,11 @@
   }
 
   function showRoute(item) {
-    if (!map || !item || !Array.isArray(item.route) || item.route.length < 2) {
+    if (!map || !item || !routeSegments(item).length) {
       return;
     }
     if (routeLayer) map.removeLayer(routeLayer);
-    routeLayer = window.L.polyline(item.route, {
+    routeLayer = window.L.polyline(routeSegments(item), {
       color: '#0c4a6e',
       weight: 4,
       opacity: 0.95,
@@ -192,12 +205,13 @@
     const heartRate = Number.isFinite(item.avg_hr_bpm)
       ? ` · ${Math.round(item.avg_hr_bpm)} BPM`
       : '';
-    routeSummary.textContent = `${item.date} · ${number.format(item.distance_km)} KM · ${formatPace(item.pace_min_km)}${heartRate}`;
+    const merged = mergedLabel(item) ? ` · ${mergedLabel(item)}` : '';
+    routeSummary.textContent = `${item.date} · ${number.format(item.distance_km)} KM · ${formatPace(item.pace_min_km)}${heartRate}${merged}`;
   }
 
   function renderRouteOptions(items) {
     const routes = [...items]
-      .filter((item) => Array.isArray(item.route) && item.route.length >= 2)
+      .filter((item) => routeSegments(item).length)
       .sort((a, b) => b.date.localeCompare(a.date));
     routeSelect.replaceChildren();
     if (!routes.length) {
@@ -216,14 +230,15 @@
     routes.forEach((item) => {
       const option = document.createElement('option');
       option.value = String(item._index);
-      option.textContent = `${item.date} · ${number.format(item.distance_km)} KM`;
+      const merged = mergedLabel(item) ? ` · ${mergedLabel(item)}` : '';
+      option.textContent = `${item.date} · ${number.format(item.distance_km)} KM${merged}`;
       routeSelect.append(option);
     });
     showRoute(routes[0]);
   }
 
   function selectRoute(item) {
-    if (!item || !Array.isArray(item.route) || item.route.length < 2) return;
+    if (!item || !routeSegments(item).length) return;
     routeSelect.value = String(item._index);
     showRoute(item);
     mapElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -235,7 +250,7 @@
     activitiesBody.replaceChildren();
     visible.forEach((item) => {
       const row = document.createElement('tr');
-      const hasRoute = Array.isArray(item.route) && item.route.length >= 2;
+      const hasRoute = routeSegments(item).length > 0;
       row.dataset.hasRoute = String(hasRoute);
       if (hasRoute) {
         row.title = '点击查看路线';
@@ -253,6 +268,22 @@
         cell.textContent = value;
         row.append(cell);
       });
+      if (mergedLabel(item)) {
+        const details = document.createElement('details');
+        details.className = 'running-segments';
+        details.addEventListener('click', (event) => event.stopPropagation());
+        const summary = document.createElement('summary');
+        summary.textContent = mergedLabel(item);
+        const segments = document.createElement('ol');
+        item.segments.forEach((segment) => {
+          const entry = document.createElement('li');
+          const distance = new Intl.NumberFormat('zh-CN', { maximumFractionDigits: 3 }).format(segment.distance_km);
+          entry.textContent = `${distance} km · ${formatDuration(segment.duration_min)}`;
+          segments.append(entry);
+        });
+        details.append(summary, segments);
+        row.lastElementChild.append(details);
+      }
       activitiesBody.append(row);
     });
   }
@@ -314,12 +345,16 @@
       return response.json();
     })
     .then((payload) => {
-      const minimumDistance = Number(payload.minimum_distance_km) || 2;
+      const configuredMinimum = Number(payload.minimum_distance_km);
+      const minimumDistance = Number.isFinite(configuredMinimum) ? Math.max(0, configuredMinimum) : 0;
+      const statisticsStartDate = payload.statistics_start_date || '2022-01-01';
       allActivities = (payload.activities || []).filter(
         (item) =>
           /^\d{4}-\d{2}-\d{2}$/.test(item.date) &&
+          item.date >= statisticsStartDate &&
           Number.isFinite(item.distance_km) &&
           Number.isFinite(item.duration_min) &&
+          item.distance_km > 0 &&
           item.distance_km >= minimumDistance &&
           item.duration_min > 0
       );
@@ -334,7 +369,7 @@
       selectedYear = years[0];
       renderYearButtons(years);
 
-      const firstDate = allActivities[0].date;
+      const firstDate = statisticsStartDate;
       lifetime.textContent = `记录自己的跑步旅程。公开数据从 ${firstDate} 开始，当前共 ${allActivities.length} 次、${number.format(distanceTotal(allActivities))} KM。`;
       updated.textContent = payload.generated_date
         ? `DATA UPDATED ${payload.generated_date}`

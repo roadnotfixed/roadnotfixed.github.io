@@ -267,6 +267,31 @@
   overflow-x: auto;
 }
 
+.running-log-note {
+  margin: 12px 0 0;
+  color: var(--run-muted);
+  font-size: 0.72rem;
+  line-height: 1.65;
+}
+
+.running-segments {
+  margin-top: 4px;
+  color: var(--run-muted);
+  font-size: 0.68rem;
+  text-align: left;
+}
+
+.running-segments summary {
+  cursor: pointer;
+  text-align: right;
+}
+
+.running-segments ol {
+  margin: 6px 0 0;
+  padding-left: 20px;
+  line-height: 1.8;
+}
+
 .running-table {
   width: 100%;
   border-collapse: collapse;
